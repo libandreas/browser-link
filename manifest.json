@@ -1,0 +1,30 @@
+{
+	"manifest_version": 3,
+	"name": "Link: Open Website Source in VS Code",
+	"version": "26.10.4",
+	"description": "Open a web page's HTML or PHP source in VS Code with one click. Requires the Link extension in VS Code.",
+	"icons": {
+		"16": "favicon-chrome-6.png",
+		"32": "favicon-chrome-6.png",
+		"48": "favicon-chrome-6.png",
+		"128": "favicon-chrome-6.png"
+	},
+	"background": {
+		"service_worker": "service-worker-6.js"
+	},
+	"host_permissions": [
+		"http://127.0.0.1/*"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"www/tab-6.js"
+			],
+			"run_at": "document_idle"
+		}
+	]
+}

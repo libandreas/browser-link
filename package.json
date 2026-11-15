@@ -1,0 +1,34 @@
+{
+	"name": "browser-link",
+	"displayName": "Link: Open Website Source from Your Browser",
+	"keywords": [
+		"html",
+		"php",
+		"laravel",
+		"symfony",
+		"codeigniter",
+		"express",
+		"astro",
+		"vite",
+		"nuxt",
+		"vue",
+		"sveltekit",
+		"dart",
+		"flutter"
+	],
+	"description": "Jump from a web page to its HTML or PHP source in VS Code. Connect Chrome DevTools to your project to save CSS changes.",
+	"version": "26.10.4",
+	"publisher": "pa-andreas",
+	"license": "GPL-3.0-or-later",
+	"icon": "favicon-6.png",
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"main": "./extension-6.js",
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"devDependencies": {
+		"yazl": "^3.3.1"
+	}
+}

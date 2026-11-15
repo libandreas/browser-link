@@ -1,0 +1,34 @@
+﻿# Dependencies installed from package-lock.json
+node_modules/
+
+# Credentials and local deployment configuration
+.env
+.env.*
+!.env.example
+!.env.sample
+rclone.conf
+*.pem
+*.key
+
+# Generated extension packages and build output
+*.zip
+*.vsix
+dist/
+build/
+output/
+out/
+
+# Local editor, agent, and temporary state
+.vscode/
+.zed/
+.idea/
+.agents/
+.codex/
+.tmp/
+*.log
+*.logs
+.DS_Store
+Thumbs.db
+
+# Generated Chrome DevTools workspace metadata contains a local absolute path
+.well-known/appspecific/com.chrome.devtools.json
