@@ -5,6 +5,12 @@
 **/test-files/**
 **/build-*.js
 **/*.zip
+web/**
+**/.git/**
+**/*.vsix
+**/tools/**
+.vscodeignore
+.chromeignore
 **/*.logs
 **/test-reports/**
 **/reports/**

@@ -29,6 +29,7 @@ out/
 *.logs
 .DS_Store
 Thumbs.db
+common/ftp.php
 
 # Generated Chrome DevTools workspace metadata contains a local absolute path
 .well-known/appspecific/com.chrome.devtools.json

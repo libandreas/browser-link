@@ -5,9 +5,6 @@ import { fileURLToPath } from 'node:url';
 import { deflateRawSync } from 'node:zlib';
 
 const projectRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const projectsRoot = path.dirname(projectRoot);
-const projectArgument = process.argv[2];
-const projectPrefix = projectArgument ? path.basename(path.resolve(projectArgument)).split(' - ')[0] : '';
 const outputRoot = path.join(homedir(), 'WebSites Backups');
 const backupDate = formatDate(new Date());
 
@@ -45,53 +42,22 @@ const ignoredDirectoryNames = new Set([
 const crcTable = createCrc32Table();
 
 async function main() {
-	const projects = await findProjects();
-	console.log(`Family: ${projectPrefix || 'All'}\nProjects: ${projects.length}\nDestination: ${outputRoot}`);
-	if (projects.length === 0) return;
+	const projectName = path.basename(projectRoot);
+	const outputPath = path.join(outputRoot, `${projectName}-${backupDate}.zip`);
+	const temporaryPath = `${outputPath}.partial`;
+	console.log(`Project: ${projectName}\nDestination: ${outputRoot}`);
 	await fs.mkdir(outputRoot, { recursive: true });
-	let completed = 0;
 
-	for (const root of projects) {
-		const projectName = path.basename(root);
-		const outputPath = path.join(outputRoot, `${projectName}-${backupDate}.zip`);
-		const temporaryPath = `${outputPath}.partial`;
-		console.log(`\nProject: ${projectName}`);
-
-		try {
-			const files = await collectFiles(root, root);
-			await createZip(files, temporaryPath);
-			await fs.rename(temporaryPath, outputPath);
-			completed += 1;
-			console.log(`Backup: ${outputPath}\nFiles: ${files.length}`);
-		} catch (error) {
-			console.error(`Failed: ${projectName}: ${error.message}`);
-			process.exitCode = 1;
-			await fs.rm(temporaryPath, { force: true }).catch(() => {});
-		}
+	try {
+		const files = await collectFiles(projectRoot, projectRoot);
+		await createZip(files, temporaryPath);
+		await fs.rename(temporaryPath, outputPath);
+		console.log(`Backup: ${outputPath}\nFiles: ${files.length}`);
+	} catch (error) {
+		console.error(`Failed: ${projectName}: ${error.message}`);
+		process.exitCode = 1;
+		await fs.rm(temporaryPath, { force: true }).catch(() => {});
 	}
-
-	console.log(`\nCompleted: ${completed}/${projects.length}\nFailed: ${projects.length - completed}`);
-}
-
-async function findProjects() {
-	const entries = await fs.readdir(projectsRoot, { withFileTypes: true });
-	const projects = [];
-
-	for (const entry of entries) {
-		if (!entry.isDirectory() || !entry.name.includes('.')) continue;
-		if (projectPrefix && !entry.name.toLowerCase().startsWith(projectPrefix.toLowerCase())) continue;
-
-		const root = path.join(projectsRoot, entry.name);
-
-		try {
-			if ((await fs.stat(path.join(root, 'common'))).isDirectory()) projects.push(root);
-		} catch (error) {
-			if (error.code !== 'ENOENT') throw error;
-		}
-	}
-
-	if (projects.length === 0) projects.push(projectRoot);
-	return projects.sort();
 }
 
 async function collectFiles(directory, root) {

@@ -85,6 +85,12 @@ function globToRegex(pattern) {
 }
 
 function isIgnored(relativePath, rules) {
+	if (
+		/\.php$/i.test(relativePath)
+		|| /(?:^|\/)[^/]*backup[^/]*(?:\/|$)/i.test(relativePath)
+		|| /(?:\.bak|\.backup|\.old|\.orig|\.swp|\.swo|\.tmp|~)$/i.test(relativePath)
+	) return true;
+
 	let ignored = false;
 	for (const rule of rules) {
 		if (rule.regex.test(relativePath)) ignored = !rule.negated;

@@ -1,4 +1,7 @@
 **/test/**
+# Maintenance scripts are not extension assets.
+common/backup.mjs
+**/*.php
 **/tests/**
 **/test-files/**
 **/tools/**
